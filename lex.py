@@ -26,20 +26,17 @@ class Lexer:
         return self.source[self.currPos + 1]
 
     # Invalid token, error out
-    def abort(self, source):
-        sys.exit("Lex error " + source)
+    def abort(self, message):
+        sys.exit("Lex error " + message)
     
     
     # Skip whitespace, not new lines
     def skip_whitespace(self):
-        pass
+        if self.currChar == ' ' or self.currChar == '\t' or self.currChar == '\r':
+            self.nextChar()
 
     # Skip comments
     def skip_comments(self):
-        pass
-
-    # Return next token
-    def getToken(self):
         pass
 
     def getToken(self):
@@ -48,9 +45,12 @@ class Lexer:
             '-': TokenType.MINUS,
             '*': TokenType.ASTERISK,
             '/': TokenType.SLASH,
-            r'\n': TokenType.NEWLINE,
-            r'\0': TokenType.EOF,
+            '\n': TokenType.NEWLINE,
+            '\0': TokenType.EOF,
         }
+        
+        # when providing tokens, we need to skip whitespace chars
+        self.skip_whitespace()
 
         '''
         If the current char is in the token_map(dict), take the current char, the token_map and assign '[]' self.currChar.
@@ -58,7 +58,7 @@ class Lexer:
         if self.currChar in token_map:
             token = Token(self.currChar, token_map[self.currChar])
         else:
-            sys.exit("Error" + self.currChar)
+            self.abort("Unknown token: " + self.currChar)
         # Go onto the next cahr
         self.nextChar()
         return token
@@ -68,7 +68,6 @@ class Token:
     def __init__(self, tokenText, tokenKind):
         self.text = tokenText # actual text 'PLUS'
         self.kind = tokenKind # The token assigned '+'
-
 
 
 class TokenType(enum.Enum):
