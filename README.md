@@ -8,4 +8,4 @@ This is also a good read: http://www.compilers.iecc.com/crenshaw/
 
 ## Basic layout: 
 
-![compiler](https://github.com/Bchass/Compiler/assets/34097574/691a4c60-82c1-4e65-9f22-ebcfd9f668ee)
+![compiler1](https://github.com/Bchass/Compiler/assets/34097574/b5ddcf0b-868a-4279-a2c7-ef4ddc779d24)
