@@ -5,7 +5,7 @@ Let's check the type of tokens we supply
 '''
 
 def getToken_Test():
-    source = "+- */"
+    source = "+- */ >>= = !="
     lexer = Lexer(source)
 
     token = lexer.getToken()

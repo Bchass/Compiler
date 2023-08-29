@@ -32,7 +32,7 @@ class Lexer:
     
     # Skip whitespace, not new lines
     def skip_whitespace(self):
-        if self.currChar == ' ' or self.currChar == '\t' or self.currChar == '\r':
+        while self.currChar == ' ' or self.currChar == '\t' or self.currChar == '\r':
             self.nextChar()
 
     # Skip comments
@@ -47,6 +47,12 @@ class Lexer:
             '/': TokenType.SLASH,
             '\n': TokenType.NEWLINE,
             '\0': TokenType.EOF,
+            '=': TokenType.EQ,
+            '>': TokenType.GT,
+            '>=': TokenType.GTEQ,
+            '<': TokenType.LT,
+            '<=': TokenType.LTEQ,
+            '!': TokenType.NOTEQ,
         }
         
         # when providing tokens, we need to skip whitespace chars
@@ -59,6 +65,33 @@ class Lexer:
             token = Token(self.currChar, token_map[self.currChar])
         else:
             self.abort("Unknown token: " + self.currChar)
+        
+        if self.currChar == '>':
+            if self.peek() == '=':
+                # we need to look at the next char so we don't overlap the prior
+                self.nextChar()
+                lastChar = self.currChar
+                token = Token(lastChar + self.currChar, TokenType.GTEQ)
+            else:
+                token = Token(self.currChar, TokenType.GT)
+
+        elif self.currChar == '<':
+            if self.peek() == '=':
+                # we need to look at the next char so we don't overlap the prior
+                self.nextChar()
+                lastChar = self.currChar
+                token = Token(lastChar + self.currChar, TokenType.LTEQ)
+            else:
+                token = Token(self.currChar, TokenType.LT)
+
+        elif self.currChar == '!':
+            if self.peek() == '=':
+                self.nextChar()
+                lastChar = self.currChar
+                token = Token(lastChar + self.currChar, TokenType.NOTEQ)
+            else:
+                self.abort("Expected !=, got !" + self.peek())
+
         # Go onto the next cahr
         self.nextChar()
         return token
