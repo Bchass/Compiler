@@ -129,7 +129,6 @@ class Lexer:
             token_text = self.source[start : self.currPos - 1]
             token_tpye = TokenType.STRING
 
-        #TODO: Figure out why 'THEN' is being read in as another IDENT
         # if the curr chas is alphabetical, take it's current pos
         elif self.currChar.isalpha():
             start = self.currPos
@@ -145,7 +144,6 @@ class Lexer:
             else:
                 token_type = TokenType.IDENT
 
-
         # if we have a digit, take it's current pos
         elif self.currChar.isdigit():
             start = self.currPos
@@ -160,7 +158,6 @@ class Lexer:
                 self.nextChar()
             token_text = self.source[start : self.currPos + 1]
             token_type = TokenType.NUMBER
-
 
         if token_type is not None:
             self.nextChar()
