@@ -1,4 +1,4 @@
-import sys, enum, re
+import sys, enum
 
 """
 Determine where each token starts/stops
@@ -58,7 +58,7 @@ class Lexer:
             "<": TokenType.LT,
             "<=": TokenType.LTEQ,
             "!=": TokenType.NOTEQ,
-            '"': TokenType.STRING,
+            '"': TokenType.STRING
         }
 
         # Initialize token_text and token_type to None
@@ -129,6 +129,23 @@ class Lexer:
             token_text = self.source[start : self.currPos - 1]
             token_tpye = TokenType.STRING
 
+        #TODO: Figure out why 'THEN' is being read in as another IDENT
+        # if the curr chas is alphabetical, take it's current pos
+        elif self.currChar.isalpha():
+            start = self.currPos
+            # if all chars are alphabetical, look at the next char
+            while self.peek().isalnum():
+                self.nextChar()
+            # Find the current sub-string
+            token_text = self.source[start : self.currPos + 1]
+            keyword = Token.checkIfKeyword(token_text)
+
+            if keyword is not None:
+                token_type = keyword
+            else:
+                token_type = TokenType.IDENT
+
+
         # if we have a digit, take it's current pos
         elif self.currChar.isdigit():
             start = self.currPos
@@ -141,11 +158,11 @@ class Lexer:
             # Need to check once more so we don't incorrectly record a num that wasn't given
             while self.peek().isdigit():
                 self.nextChar()
-
             token_text = self.source[start : self.currPos + 1]
             token_type = TokenType.NUMBER
 
-        if token_type is None:
+
+        if token_type is not None:
             self.nextChar()
             return Token(token_text, token_type)
         else:
@@ -157,6 +174,14 @@ class Token:
         self.text = tokenText  # actual text 'PLUS'
         self.kind = tokenKind  # The token assigned '+'
 
+    @staticmethod
+    def checkIfKeyword(tokenText):
+        for kind in TokenType:
+            # check the enum value for a keyword
+            if kind.name == tokenText and kind.value >= 100 and kind.value < 200:
+                return kind
+        return None
+
 
 class TokenType(enum.Enum):
     EOF = -1
@@ -166,17 +191,17 @@ class TokenType(enum.Enum):
     STRING = 3
 
     # Keywords
-    label = 101
-    goto = 102
-    print = 103
-    input = 104
-    let = 105
+    LABEL = 101
+    GOTO = 102
+    PRINT = 103
+    INPUT = 104
+    LET = 105
     IF = 106
-    then = 107
-    endif = 108
+    THEN = 107
+    ENDIF = 108
     WHILE = 109
-    repeat = 110
-    endwhile = 111
+    REPAT = 110
+    ENDWHILE = 111
 
     # Operators
     EQ = 201

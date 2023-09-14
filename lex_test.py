@@ -5,7 +5,7 @@ Let's check the type of tokens we supply
 '''
 
 def getToken_Test():
-    source = "+-123 9.8654*/"
+    source = "IF+-123 foo*THEN/"
     lexer = Lexer(source)
 
     token = lexer.getToken()
